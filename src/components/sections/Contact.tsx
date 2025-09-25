@@ -109,7 +109,7 @@ export const Contact: React.FC = () => {
           message: result.message 
         });
       }
-    } catch (error) {
+    } catch {
       setSubmission({ 
         status: 'error', 
         message: 'An unexpected error occurred. Please try again later.' 

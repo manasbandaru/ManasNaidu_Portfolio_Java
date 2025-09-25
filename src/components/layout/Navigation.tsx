@@ -63,7 +63,7 @@ export const smoothScrollTo = (elementId: string) => {
           });
         }
       }, 100);
-    } catch (error) {
+    } catch {
       // Fallback method: calculate position and scroll
       const headerOffset = 80;
       const elementPosition = element.getBoundingClientRect().top;

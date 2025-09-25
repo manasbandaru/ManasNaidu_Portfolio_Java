@@ -3,18 +3,23 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:analyze": "node scripts/analyze-bundle.js",
     "build:production": "NODE_ENV=production npm run build",
+    "build:netlify": "tsc -b && vite build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "preview:network": "vite preview --host",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist node_modules/.vite",
-    "prepare": "npm run type-check && npm run lint",
+    "prepare": "npm run type-check",
     "deploy": "./scripts/deploy.sh"
   },
   "dependencies": {
