@@ -1,0 +1,1 @@
+export { AccessibilityTest } from './AccessibilityTest';

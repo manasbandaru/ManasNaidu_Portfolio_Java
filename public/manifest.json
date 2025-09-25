@@ -1,0 +1,21 @@
+{
+  "name": "Manas Naidu - Java Full Stack Developer Portfolio",
+  "short_name": "Manas Portfolio",
+  "description": "Manas Naidu - Java Full Stack Developer Portfolio showcasing 5+ years of experience in Spring Boot, microservices, and cloud platforms across finance, healthcare, and e-commerce",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["portfolio", "developer", "java", "technology"],
+  "lang": "en-US",
+  "dir": "ltr"
+}

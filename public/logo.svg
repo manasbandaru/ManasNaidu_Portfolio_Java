@@ -1,0 +1,19 @@
+<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer ring with gradient -->
+  <circle cx="20" cy="20" r="18" stroke="url(#logoGradient)" stroke-width="2" fill="none"/>
+  
+  <!-- Inner geometric design -->
+  <path d="M12 20 L20 12 L28 20 L20 28 Z" stroke="url(#logoGradient)" stroke-width="2" fill="rgba(139, 92, 246, 0.1)"/>
+  
+  <!-- Center dot -->
+  <circle cx="20" cy="20" r="3" fill="url(#logoGradient)"/>
+  
+  <!-- Gradient definition -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6" />
+      <stop offset="50%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+  </defs>
+</svg>

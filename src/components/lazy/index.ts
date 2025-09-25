@@ -1,0 +1,1 @@
+export { LazyBackgroundScene } from './LazyBackgroundScene';
