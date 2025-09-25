@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { checkWebGLSupport, WebGLFallback } from './WebGLErrorBoundary';
 import { cleanupThreeJSResources } from '../../utils/performanceMonitor';
+import { StaticBackground } from './StaticBackground';
 
 interface BackgroundSceneProps {
   className?: string;
@@ -61,17 +62,27 @@ export const BackgroundScene: React.FC<BackgroundSceneProps> = ({ className = ''
     camera.position.set(0, 0, 15);
     cameraRef.current = camera;
 
-    // Renderer setup
+    // Renderer setup with production optimizations
     const renderer = new THREE.WebGLRenderer({ 
-      antialias: settings.enablePostProcessing, 
+      antialias: settings.enablePostProcessing && !import.meta.env.PROD, 
       alpha: true,
-      powerPreference: 'high-performance'
+      powerPreference: import.meta.env.PROD ? 'default' : 'high-performance',
+      stencil: false,
+      depth: true,
+      logarithmicDepthBuffer: false
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, settings.enablePostProcessing ? 2 : 1));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, import.meta.env.PROD ? 1 : (settings.enablePostProcessing ? 2 : 1)));
     renderer.setClearColor(0x000000, 0);
-    renderer.shadowMap.enabled = settings.enableLighting;
+    renderer.shadowMap.enabled = settings.enableLighting && !import.meta.env.PROD;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    
+    // Production optimizations
+    if (import.meta.env.PROD) {
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.NoToneMapping;
+      renderer.toneMappingExposure = 1;
+    }
     rendererRef.current = renderer;
 
     mountRef.current.appendChild(renderer.domElement);
@@ -117,28 +128,37 @@ export const BackgroundScene: React.FC<BackgroundSceneProps> = ({ className = ''
       
       const elapsedTime = clockRef.current?.getElapsedTime() || 0;
       
-      // Animate particles
+      // Animate particles with reduced complexity in production
       if (particlesRef.current) {
-        particlesRef.current.rotation.x = elapsedTime * 0.05;
-        particlesRef.current.rotation.y = elapsedTime * 0.1;
+        const rotationSpeed = import.meta.env.PROD ? 0.02 : 0.05;
+        particlesRef.current.rotation.x = elapsedTime * rotationSpeed;
+        particlesRef.current.rotation.y = elapsedTime * (rotationSpeed * 2);
         
-        // Mouse interaction effect
-        const mouseInfluence = 0.2;
-        particlesRef.current.rotation.x += mouseRef.current.y * mouseInfluence * 0.02;
-        particlesRef.current.rotation.y += mouseRef.current.x * mouseInfluence * 0.02;
+        // Reduced mouse interaction in production
+        if (!import.meta.env.PROD) {
+          const mouseInfluence = 0.2;
+          particlesRef.current.rotation.x += mouseRef.current.y * mouseInfluence * 0.02;
+          particlesRef.current.rotation.y += mouseRef.current.x * mouseInfluence * 0.02;
+        }
         
-        // Update particle colors for color-shifting effect
-        updateParticleColors(elapsedTime);
+        // Update particle colors less frequently in production
+        if (!import.meta.env.PROD || Math.floor(elapsedTime * 10) % 3 === 0) {
+          updateParticleColors(elapsedTime);
+        }
       }
       
-      // Animate geometric shapes
-      animateGeometry(elapsedTime);
+      // Animate geometric shapes with reduced frequency in production
+      if (!import.meta.env.PROD || Math.floor(elapsedTime * 5) % 2 === 0) {
+        animateGeometry(elapsedTime);
+      }
       
-      // Smooth camera movement
-      animateCamera(elapsedTime);
+      // Smooth camera movement (reduced in production)
+      if (!import.meta.env.PROD) {
+        animateCamera(elapsedTime);
+      }
       
       // Update lighting
-      if (settings.enableLighting) {
+      if (settings.enableLighting && !import.meta.env.PROD) {
         updateLighting(elapsedTime);
       }
       
@@ -192,7 +212,30 @@ export const BackgroundScene: React.FC<BackgroundSceneProps> = ({ className = ''
     const isMobile = window.innerWidth < 768;
     const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
     const hasHighDPI = window.devicePixelRatio > 1.5;
+    const isProduction = import.meta.env.PROD;
     
+    // More conservative settings for production
+    if (isProduction) {
+      if (isMobile || isLowEnd) {
+        return {
+          particleCount: 300,
+          geometryCount: 2,
+          enableLighting: false,
+          enablePostProcessing: false,
+          maxFPS: 24,
+        };
+      } else {
+        return {
+          particleCount: 600,
+          geometryCount: 3,
+          enableLighting: false,
+          enablePostProcessing: false,
+          maxFPS: 30,
+        };
+      }
+    }
+    
+    // Development settings (more permissive)
     if (isMobile || isLowEnd) {
       return {
         particleCount: 500,
@@ -472,9 +515,14 @@ export const BackgroundScene: React.FC<BackgroundSceneProps> = ({ className = ''
     );
   }
 
-  // Show fallback if WebGL is not supported
+  // Show fallback if WebGL is not supported or if we're in production with low performance
   if (!webglSupported) {
     return <WebGLFallback />;
+  }
+
+  // Use static background in production for better performance
+  if (import.meta.env.PROD && (window.innerWidth < 768 || navigator.hardwareConcurrency < 4)) {
+    return <StaticBackground className={className} />;
   }
 
   return (

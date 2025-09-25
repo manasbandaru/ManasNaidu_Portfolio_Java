@@ -245,4 +245,65 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  
+  /* Production-specific optimizations */
+  .production-optimized {
+    will-change: auto;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  /* Responsive text handling */
+  .responsive-text {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  /* Experience timeline specific fixes */
+  .experience-card {
+    contain: layout style paint;
+    overflow: hidden;
+  }
+  
+  .experience-date {
+    min-width: 0;
+    flex-shrink: 1;
+    max-width: 120px;
+  }
+  
+  @media (max-width: 640px) {
+    .experience-date {
+      max-width: 100px;
+    }
+  }
+  
+  /* Prevent layout shifts */
+  .layout-stable {
+    contain: layout;
+  }
+  
+  /* Optimize animations for production */
+  @media (prefers-reduced-motion: no-preference) {
+    .smooth-animation {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+  
+  /* Force hardware acceleration for smooth animations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  /* Optimize for touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    .hover-effect:hover {
+      transform: none;
+    }
+    
+    .gpu-accelerated {
+      will-change: auto;
+    }
+  }
 }

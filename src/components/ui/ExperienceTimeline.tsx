@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Experience } from '../../types/portfolio';
+import { getOptimizedAnimationProps, getOptimizedImageProps, shouldReduceMotion } from '../../utils/productionOptimizations';
 
 interface ExperienceTimelineProps {
   experiences: Experience[];
@@ -55,30 +56,35 @@ export const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ experien
         {experiences.map((exp, index) => (
           <motion.div
             key={exp.id}
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: shouldReduceMotion() ? 0 : -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            viewport={{ once: true }}
+            transition={{ 
+              duration: shouldReduceMotion() ? 0.2 : 0.5, 
+              delay: shouldReduceMotion() ? 0 : index * 0.05 
+            }}
+            viewport={{ once: true, margin: '50px' }}
             className="relative"
           >
             {/* Timeline dot */}
             <div className="absolute left-6 w-4 h-4 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full border-4 border-gray-800 z-10"></div>
 
             {/* Experience card */}
-            <div className="ml-16">
+            <div className="ml-12 sm:ml-16">
               <motion.div
-                className="bg-gray-700 rounded-xl p-6 cursor-pointer hover:bg-gray-600 transition-all duration-300 border border-gray-600 hover:border-purple-500/50"
+                className="experience-card bg-gray-700 rounded-xl p-4 sm:p-6 cursor-pointer hover:bg-gray-600 smooth-animation border border-gray-600 hover:border-purple-500/50"
                 onClick={() => toggleExpanded(exp.id)}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                {...getOptimizedAnimationProps({
+                  whileHover: { scale: 1.02 },
+                  whileTap: { scale: 0.98 },
+                  transition: { duration: 0.3 }
+                })}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center space-x-4">
+                <div className="flex items-start justify-between mb-4 gap-4">
+                  <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
                     {/* Company logo */}
-                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-600 flex-shrink-0">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-gray-600 flex-shrink-0">
                       <img
-                        src={getCompanyLogo(exp.company)}
-                        alt={`${exp.company} logo`}
+                        {...getOptimizedImageProps(getCompanyLogo(exp.company), `${exp.company} logo`)}
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
@@ -87,28 +93,33 @@ export const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ experien
                       />
                     </div>
 
-                    <div>
-                      <h3 className="text-xl font-semibold text-white">{exp.position}</h3>
-                      <p className="text-purple-400 font-medium">{exp.company}</p>
-                      <p className="text-gray-400 text-sm flex items-center">
-                        <span className="mr-2">📍</span>
-                        {exp.location}
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-lg sm:text-xl font-semibold text-white truncate">{exp.position}</h3>
+                      <p className="text-purple-400 font-medium truncate">{exp.company}</p>
+                      <p className="text-gray-400 text-sm flex items-center truncate">
+                        <span className="mr-2 flex-shrink-0">📍</span>
+                        <span className="truncate">{exp.location}</span>
                       </p>
                     </div>
                   </div>
 
-                  <div className="text-right flex-shrink-0">
-                    <div className="inline-flex items-center bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-sm mb-2">
+                  <div className="experience-date text-right flex-shrink-0">
+                    <div className="inline-flex items-center bg-purple-500/20 text-purple-300 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm mb-2 w-full justify-center">
                       {exp.current ? (
                         <span className="flex items-center">
                           <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
-                          Current
+                          <span>Current</span>
                         </span>
                       ) : (
-                        <span>{exp.startDate} - {exp.endDate}</span>
+                        <span className="responsive-text text-center">
+                          <span className="hidden sm:inline text-xs">{exp.startDate} - {exp.endDate}</span>
+                          <span className="sm:hidden text-xs">
+                            {exp.startDate.split(' ')[1] || exp.startDate} - {exp.endDate?.split(' ')[1] || exp.endDate}
+                          </span>
+                        </span>
                       )}
                     </div>
-                    <div className="text-gray-400 text-xs">
+                    <div className="text-gray-400 text-xs text-center responsive-text">
                       {calculateDuration(exp.startDate, exp.endDate, exp.current)}
                     </div>
                   </div>

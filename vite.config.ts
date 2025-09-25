@@ -61,7 +61,11 @@ export default defineConfig({
     // Target modern browsers for smaller bundle
     target: ['es2020', 'chrome80', 'firefox78', 'safari14', 'edge88'],
     // Enable CSS minification
-    cssMinify: true
+    cssMinify: true,
+    // Optimize for production deployment
+    reportCompressedSize: false,
+    // Increase chunk size warning limit for better performance
+    chunkSizeWarningLimit: 1500
   },
   // Optimize dependencies
   optimizeDeps: {
@@ -82,6 +86,17 @@ export default defineConfig({
   assetsInclude: ['**/*.woff2', '**/*.woff', '**/*.ttf'],
   // Define environment variables
   define: {
-    __APP_VERSION__: JSON.stringify('1.0.0')
+    __APP_VERSION__: JSON.stringify('1.0.0'),
+    // Optimize for production
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+  },
+  // CSS optimization
+  css: {
+    devSourcemap: false,
+    preprocessorOptions: {
+      scss: {
+        charset: false
+      }
+    }
   }
 })

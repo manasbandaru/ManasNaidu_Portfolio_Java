@@ -6,8 +6,14 @@ import { ErrorBoundary } from './components/error';
 import { WebGLErrorBoundary } from './components/3d/WebGLErrorBoundary';
 import { LazyBackgroundScene } from './components/lazy/LazyBackgroundScene';
 import { portfolioData } from './data/portfolio';
+import { preloadCriticalResources } from './utils/productionOptimizations';
 
 import { useAnnouncer } from './hooks/useAnnouncer';
+
+// Import diagnostics in development
+if (import.meta.env.DEV) {
+  import('./utils/diagnostics');
+}
 
 // Get social links and email from portfolio data
 const { socialLinks, personalInfo } = portfolioData;
@@ -18,6 +24,9 @@ function App() {
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
+    // Preload critical resources for production
+    preloadCriticalResources();
+    
     // Announce to screen readers that the page has loaded
     setTimeout(() => {
       announce('Portfolio website loaded successfully. Navigate through sections using the menu or scroll to explore.');
