@@ -37,54 +37,13 @@ function optimizeIndexHtml() {
     <style>
       /* Critical CSS for preventing layout shifts */
       body { margin: 0; background-color: #1f2937; color: white; }
-      .loading-fallback { 
-        position: fixed; 
-        inset: 0; 
-        background: linear-gradient(135deg, #1f2937 0%, #374151 100%); 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        z-index: 9999;
-      }
-      .loading-spinner {
-        width: 40px;
-        height: 40px;
-        border: 3px solid #374151;
-        border-top: 3px solid #8b5cf6;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
     </style>
   `;
 
   // Insert optimizations before closing head tag
   html = html.replace('</head>', `${optimizations}</head>`);
 
-  // Add loading fallback
-  const loadingFallback = `
-    <div class="loading-fallback" id="loading-fallback">
-      <div class="loading-spinner"></div>
-    </div>
-    <script>
-      // Hide loading fallback when React app loads
-      window.addEventListener('load', function() {
-        setTimeout(function() {
-          const fallback = document.getElementById('loading-fallback');
-          if (fallback) {
-            fallback.style.opacity = '0';
-            fallback.style.transition = 'opacity 0.3s ease';
-            setTimeout(() => fallback.remove(), 300);
-          }
-        }, 100);
-      });
-    </script>
-  `;
-
-  html = html.replace('<div id="root"></div>', `<div id="root"></div>${loadingFallback}`);
+  // Skip loading fallback - React app handles its own loading
 
   fs.writeFileSync(indexPath, html);
   console.log('✅ HTML optimizations applied');
