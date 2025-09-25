@@ -8,6 +8,7 @@ import { Contact } from './components/sections/Contact';
 import { ScrollProgress } from './components/ui/ScrollProgress';
 import { ErrorBoundary } from './components/error';
 import { portfolioData } from './data/portfolio';
+import './styles/mobile-optimizations.css';
 
 // Get social links and email from portfolio data
 const { socialLinks, personalInfo } = portfolioData;

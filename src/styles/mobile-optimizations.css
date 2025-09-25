@@ -1,0 +1,38 @@
+/* Mobile Performance Optimizations */
+
+/* Optimize for touch devices - disable hover effects that cause flickering */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove scale hover effects on touch devices */
+  .group:hover .group-hover\:scale-105 {
+    transform: none !important;
+  }
+  
+  /* Disable backdrop blur on mobile for better performance */
+  .backdrop-blur-sm {
+    backdrop-filter: none !important;
+    background-color: rgba(31, 41, 55, 0.8) !important;
+  }
+}
+
+/* Mobile specific optimizations */
+@media (max-width: 768px) {
+  /* Optimize image rendering */
+  img {
+    image-rendering: auto;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+  
+  /* Reduce complex shadows on mobile */
+  .hover\:shadow-xl:hover,
+  .hover\:shadow-lg:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  /* Disable complex gradient shadows */
+  .hover\:shadow-purple-500\/20:hover,
+  .hover\:shadow-purple-500\/10:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  }
+}

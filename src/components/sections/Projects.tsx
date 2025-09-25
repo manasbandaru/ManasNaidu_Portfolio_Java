@@ -2,9 +2,11 @@ import { motion } from 'framer-motion';
 import { ProjectCard, AnimatedSection, ParallaxWrapper } from '../ui';
 import { portfolioData } from '../../data/portfolio';
 import { useStaggerAnimation } from '../../hooks/useScrollAnimations';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 export const Projects: React.FC = () => {
-  const { ref: staggerRef, isInView, containerVariants, itemVariants } = useStaggerAnimation(0.1);
+  const { ref: staggerRef, isInView, containerVariants, itemVariants } = useStaggerAnimation(0.05);
+  const prefersReducedMotion = useReducedMotion();
 
   // Separate featured and regular projects
   const featuredProjects = portfolioData.projects.filter(project => project.featured);
@@ -41,13 +43,16 @@ export const Projects: React.FC = () => {
             </AnimatedSection>
             <motion.div 
               ref={staggerRef}
-              variants={containerVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
+              variants={prefersReducedMotion ? {} : containerVariants}
+              initial={prefersReducedMotion ? {} : "hidden"}
+              animate={prefersReducedMotion ? {} : (isInView ? "visible" : "hidden")}
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
               {featuredProjects.map((project, index) => (
-                <motion.div key={project.id} variants={itemVariants}>
+                <motion.div 
+                  key={project.id} 
+                  variants={prefersReducedMotion ? {} : itemVariants}
+                >
                   <ProjectCard
                     project={project}
                     index={index}
@@ -62,10 +67,10 @@ export const Projects: React.FC = () => {
         {regularProjects.length > 0 && (
           <div>
             <motion.h3
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
+              initial={prefersReducedMotion ? {} : { opacity: 0, x: -10 }}
+              whileInView={prefersReducedMotion ? {} : { opacity: 1, x: 0 }}
+              transition={prefersReducedMotion ? {} : { duration: 0.3, ease: 'easeOut' }}
+              viewport={{ once: true, margin: '-50px' }}
               className="text-2xl font-semibold text-white mb-8 flex items-center"
             >
               <span className="mr-2">🚀</span>
