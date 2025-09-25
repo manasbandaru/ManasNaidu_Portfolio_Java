@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Experience } from '../../types/portfolio';
-import { getOptimizedAnimationProps, getOptimizedImageProps, shouldReduceMotion } from '../../utils/productionOptimizations';
 
 interface ExperienceTimelineProps {
   experiences: Experience[];
@@ -56,11 +55,11 @@ export const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ experien
         {experiences.map((exp, index) => (
           <motion.div
             key={exp.id}
-            initial={{ opacity: 0, x: shouldReduceMotion() ? 0 : -20 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ 
-              duration: shouldReduceMotion() ? 0.1 : 0.3, 
-              delay: shouldReduceMotion() ? 0 : index * 0.02,
+            transition={{
+              duration: 0.3,
+              delay: index * 0.02,
               ease: 'easeOut'
             }}
             viewport={{ once: true, margin: '100px' }}
@@ -74,19 +73,19 @@ export const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ experien
               <motion.div
                 className="experience-card bg-gray-700 rounded-xl p-4 sm:p-6 cursor-pointer hover:bg-gray-600 smooth-animation border border-gray-600 hover:border-purple-500/50"
                 onClick={() => toggleExpanded(exp.id)}
-                {...getOptimizedAnimationProps({
-                  whileHover: { scale: 1.02 },
-                  whileTap: { scale: 0.98 },
-                  transition: { duration: 0.3 }
-                })}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                transition={{ duration: 0.2 }}
               >
                 <div className="flex items-start justify-between mb-4 gap-4">
                   <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
                     {/* Company logo */}
                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-gray-600 flex-shrink-0">
                       <img
-                        {...getOptimizedImageProps(getCompanyLogo(exp.company), `${exp.company} logo`)}
+                        src={getCompanyLogo(exp.company)}
+                        alt={`${exp.company} logo`}
                         className="w-full h-full object-cover"
+                        loading="lazy"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(exp.company)}&background=6366f1&color=fff&size=48`;
@@ -152,7 +151,7 @@ export const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ experien
                   </span>
                   <motion.div
                     animate={{ rotate: expandedId === exp.id ? 180 : 0 }}
-                    transition={{ duration: shouldReduceMotion() ? 0.1 : 0.2, ease: 'easeOut' }}
+                    transition={{ duration: 0.2, ease: 'easeOut' }}
                     className="text-purple-400"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,7 +168,7 @@ export const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ experien
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: shouldReduceMotion() ? 0.1 : 0.2, ease: 'easeOut' }}
+                    transition={{ duration: 0.2, ease: 'easeOut' }}
                     className="overflow-hidden"
                   >
                     <div className="bg-gray-800 rounded-xl p-6 mt-4 border border-gray-600">
@@ -182,11 +181,11 @@ export const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ experien
                         {exp.achievements.map((achievement, idx) => (
                           <motion.div
                             key={idx}
-                            initial={{ opacity: 0, x: shouldReduceMotion() ? 0 : -10 }}
+                            initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ 
-                              duration: shouldReduceMotion() ? 0.1 : 0.2, 
-                              delay: shouldReduceMotion() ? 0 : idx * 0.03,
+                            transition={{
+                              duration: 0.2,
+                              delay: idx * 0.03,
                               ease: 'easeOut'
                             }}
                             className="flex items-start space-x-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"

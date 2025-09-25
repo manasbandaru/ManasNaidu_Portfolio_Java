@@ -1,17 +1,7 @@
-import { lazy, Suspense } from 'react';
-import { WebGLFallback } from '../3d/WebGLErrorBoundary';
-
-// Lazy load the BackgroundScene component
-const BackgroundScene = lazy(() => 
-  import('../3d/BackgroundScene').then(module => ({
-    default: module.BackgroundScene
-  }))
-);
+import React from 'react';
+import { StaticBackground } from '../3d/StaticBackground';
 
 export const LazyBackgroundScene: React.FC = () => {
-  return (
-    <Suspense fallback={<WebGLFallback />}>
-      <BackgroundScene />
-    </Suspense>
-  );
+  // Always use static background for maximum compatibility and performance
+  return <StaticBackground />;
 };

@@ -10,7 +10,7 @@ export const isProduction = (): boolean => {
 // Optimize animations for production
 export const getOptimizedAnimationProps = (baseProps: any) => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const isLowEnd = typeof navigator !== 'undefined' && navigator.hardwareConcurrency < 4;
+  const isLowEnd = typeof navigator !== 'undefined' && typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency < 4;
   
   if (isProduction() || isMobile || isLowEnd) {
     return {
@@ -79,7 +79,7 @@ export const shouldReduceMotion = (): boolean => {
   
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isMobile = window.innerWidth < 768;
-  const isLowEnd = navigator.hardwareConcurrency < 4;
+  const isLowEnd = typeof navigator !== 'undefined' && typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency < 4;
   
   return prefersReducedMotion || isProduction() || isMobile || isLowEnd;
 };

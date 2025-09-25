@@ -18,14 +18,14 @@ console.log('🔧 Applying production fixes...');
 // Fix 1: Add viewport meta tag optimization
 function optimizeIndexHtml() {
   const indexPath = path.join(distDir, 'index.html');
-  
+
   if (!fs.existsSync(indexPath)) {
     console.warn('⚠️  index.html not found, skipping HTML optimizations');
     return;
   }
-  
+
   let html = fs.readFileSync(indexPath, 'utf8');
-  
+
   // Add performance optimizations
   const optimizations = `
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -60,10 +60,10 @@ function optimizeIndexHtml() {
       }
     </style>
   `;
-  
+
   // Insert optimizations before closing head tag
   html = html.replace('</head>', `${optimizations}</head>`);
-  
+
   // Add loading fallback
   const loadingFallback = `
     <div class="loading-fallback" id="loading-fallback">
@@ -83,9 +83,9 @@ function optimizeIndexHtml() {
       });
     </script>
   `;
-  
+
   html = html.replace('<div id="root"></div>', `<div id="root"></div>${loadingFallback}`);
-  
+
   fs.writeFileSync(indexPath, html);
   console.log('✅ HTML optimizations applied');
 }
@@ -128,56 +128,14 @@ self.addEventListener('fetch', function(event) {
   console.log('✅ Service worker created');
 }
 
-// Fix 3: Create _redirects file for SPA routing (Netlify)
+// Fix 3: Skip redirects (using netlify.toml instead)
 function createRedirects() {
-  const redirectsContent = `
-# SPA fallback
-/*    /index.html   200
-
-# Security headers
-/*
-  X-Frame-Options: DENY
-  X-Content-Type-Options: nosniff
-  X-XSS-Protection: 1; mode=block
-  Referrer-Policy: strict-origin-when-cross-origin
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;
-`;
-
-  const redirectsPath = path.join(distDir, '_redirects');
-  fs.writeFileSync(redirectsPath, redirectsContent.trim());
-  console.log('✅ Redirects file created');
+  console.log('✅ Using netlify.toml for redirects');
 }
 
-// Fix 4: Optimize CSS for production
+// Fix 4: Skip CSS optimization to avoid @import issues
 function optimizeCSS() {
-  const assetsDir = path.join(distDir, 'assets');
-  
-  if (!fs.existsSync(assetsDir)) {
-    console.warn('⚠️  Assets directory not found, skipping CSS optimizations');
-    return;
-  }
-  
-  const cssFiles = fs.readdirSync(assetsDir).filter(file => file.endsWith('.css'));
-  
-  cssFiles.forEach(file => {
-    const filePath = path.join(assetsDir, file);
-    let css = fs.readFileSync(filePath, 'utf8');
-    
-    // Add critical performance CSS
-    const performanceCSS = `
-/* Production performance optimizations */
-*,*::before,*::after{box-sizing:border-box}
-body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-img{max-width:100%;height:auto}
-.gpu-accelerated{transform:translateZ(0);will-change:transform}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
-`;
-    
-    css = performanceCSS + css;
-    fs.writeFileSync(filePath, css);
-  });
-  
-  console.log(`✅ Optimized ${cssFiles.length} CSS files`);
+  console.log('✅ Skipping CSS optimization to prevent @import issues');
 }
 
 // Run all fixes
