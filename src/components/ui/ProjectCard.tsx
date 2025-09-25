@@ -3,15 +3,13 @@ import { useState } from 'react';
 import type { Project } from '../../types/portfolio';
 import { LazyImage } from './LazyImage';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { createAccessibleLinkProps, createAccessibleButtonProps } from '../../utils/accessibility';
 
 interface ProjectCardProps {
   project: Project;
   index: number;
-  onViewDetails: (project: Project) => void;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onViewDetails }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
   const [imageError, setImageError] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
@@ -140,45 +138,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onView
           )}
         </div>
         
-        {/* Project Links */}
-        <div className="flex items-center justify-between">
-          <div className="flex space-x-4">
-            {project.githubUrl && (
-              <motion.a
-                {...createAccessibleLinkProps(project.githubUrl, `View source code for ${project.title}`, true)}
-                className="text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium flex items-center space-x-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-md px-1 py-1"
-                whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-                whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
-              >
-                <span role="img" aria-hidden="true">📚</span>
-                <span>View Code</span>
-              </motion.a>
-            )}
-            {project.liveUrl && (
-              <motion.a
-                {...createAccessibleLinkProps(project.liveUrl, `View live demo of ${project.title}`, true)}
-                className="text-purple-400 hover:text-purple-300 transition-colors text-sm font-medium flex items-center space-x-1 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-md px-1 py-1"
-                whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-                whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
-              >
-                <span role="img" aria-hidden="true">🚀</span>
-                <span>Live Demo</span>
-              </motion.a>
-            )}
-          </div>
-          
-          <motion.button
-            onClick={() => onViewDetails(project)}
-            className="text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium flex items-center space-x-1 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-md px-1 py-1"
-            whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-            whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
-            aria-label={`View detailed information about ${project.title}`}
-            {...createAccessibleButtonProps(`View details for ${project.title} project`)}
-          >
-            <span>View Details</span>
-            <span aria-hidden="true">→</span>
-          </motion.button>
-        </div>
+
       </div>
     </motion.div>
   );

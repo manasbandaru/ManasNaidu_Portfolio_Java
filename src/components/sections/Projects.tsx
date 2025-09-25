@@ -1,24 +1,10 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { ProjectCard, ProjectModal, AnimatedSection, ParallaxWrapper } from '../ui';
+import { ProjectCard, AnimatedSection, ParallaxWrapper } from '../ui';
 import { portfolioData } from '../../data/portfolio';
 import { useStaggerAnimation } from '../../hooks/useScrollAnimations';
-import type { Project } from '../../types/portfolio';
 
 export const Projects: React.FC = () => {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { ref: staggerRef, isInView, containerVariants, itemVariants } = useStaggerAnimation(0.1);
-
-  const handleViewDetails = (project: Project) => {
-    setSelectedProject(project);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProject(null);
-  };
 
   // Separate featured and regular projects
   const featuredProjects = portfolioData.projects.filter(project => project.featured);
@@ -65,7 +51,6 @@ export const Projects: React.FC = () => {
                   <ProjectCard
                     project={project}
                     index={index}
-                    onViewDetails={handleViewDetails}
                   />
                 </motion.div>
               ))}
@@ -92,7 +77,6 @@ export const Projects: React.FC = () => {
                   key={project.id}
                   project={project}
                   index={index + featuredProjects.length}
-                  onViewDetails={handleViewDetails}
                 />
               ))}
             </div>
@@ -107,7 +91,6 @@ export const Projects: React.FC = () => {
                 key={project.id}
                 project={project}
                 index={index}
-                onViewDetails={handleViewDetails}
               />
             ))}
           </div>
@@ -129,12 +112,7 @@ export const Projects: React.FC = () => {
         )}
       </div>
 
-      {/* Project Modal */}
-      <ProjectModal
-        project={selectedProject}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
+
     </section>
   );
 };

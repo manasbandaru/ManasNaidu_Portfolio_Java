@@ -261,7 +261,7 @@ export const heroContent = {
   ctaButtons: [
     {
       text: 'View My Work',
-      href: '#projects',
+      href: '#experience',
       primary: true
     },
     {

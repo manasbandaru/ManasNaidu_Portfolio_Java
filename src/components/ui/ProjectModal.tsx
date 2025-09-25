@@ -67,49 +67,44 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={onClose}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+          {/* Close button - always visible */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 z-10 bg-gray-800 hover:bg-gray-700 text-white p-2 rounded-full transition-colors"
+            type="button"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          {/* Modal content */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="bg-gray-800/95 backdrop-blur-md border border-gray-700/50 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto scrollbar-thin"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-gray-800 rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-gray-700"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal Header */}
-            <div className="sticky top-0 bg-gray-800/95 backdrop-blur-md border-b border-gray-700/50 p-6 flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <h2 className="text-2xl font-bold gradient-text">{project.title}</h2>
+            {/* Header */}
+            <div className="p-6 border-b border-gray-700">
+              <h2 className="text-2xl font-bold text-white mb-2">{project.title}</h2>
+              <div className="flex flex-wrap gap-2">
                 {project.featured && (
-                  <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-semibold px-2 py-1 rounded-full">
+                  <span className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">
                     ⭐ Featured
                   </span>
                 )}
-                <span className={`text-xs font-medium px-2 py-1 rounded-full border ${getStatusColor(project.status)}`}>
+                <span className={`text-xs px-2 py-1 rounded-full border ${getStatusColor(project.status)}`}>
                   {getStatusText(project.status)}
                 </span>
               </div>
-              <motion.button
-                onClick={onClose}
-                className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-700/50 rounded-lg"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </motion.button>
             </div>
 
-            {/* Modal Content */}
+            {/* Content */}
             <div className="p-6">
-              {/* Project Image */}
+              {/* Image */}
               {project.imageUrl && (
                 <div className="mb-6 rounded-lg overflow-hidden">
                   <img
@@ -124,94 +119,90 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
                 </div>
               )}
 
-              {/* Project Details Grid */}
-              <div className="grid md:grid-cols-3 gap-6 mb-6">
-                {/* Project Info */}
-                <div className="md:col-span-2">
-                  <h3 className="text-lg font-semibold text-white mb-3">Project Overview</h3>
-                  <p className="text-gray-300 leading-relaxed mb-4">
-                    {project.longDescription || project.description}
-                  </p>
-                  
-                  {/* Technology Stack */}
-                  <h4 className="text-md font-semibold text-white mb-3">Technologies Used</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech) => (
-                      <motion.span
-                        key={tech}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.2 }}
-                        className="px-3 py-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-purple-500/30 rounded-full text-sm text-purple-300 hover:from-blue-500/30 hover:to-purple-500/30 transition-all"
-                      >
-                        {tech}
-                      </motion.span>
-                    ))}
-                  </div>
+              {/* Description */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-white mb-3">Project Overview</h3>
+                <p className="text-gray-300 leading-relaxed">
+                  {project.longDescription || project.description}
+                </p>
+              </div>
+
+              {/* Technologies */}
+              <div className="mb-6">
+                <h4 className="text-md font-semibold text-white mb-3">Technologies Used</h4>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm border border-purple-500/30"
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
+              </div>
 
-                {/* Project Meta */}
-                <div className="space-y-4">
-                  <div className="bg-gray-700/30 rounded-lg p-4">
-                    <h4 className="text-md font-semibold text-white mb-3">Project Details</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-400">Started:</span>
-                        <span className="text-white">{formatDate(project.startDate)}</span>
-                      </div>
-                      {project.endDate && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-400">Completed:</span>
-                          <span className="text-white">{formatDate(project.endDate)}</span>
-                        </div>
-                      )}
-                      <div className="flex justify-between">
-                        <span className="text-gray-400">Status:</span>
-                        <span className={`font-medium ${
-                          project.status === 'completed' ? 'text-green-400' :
-                          project.status === 'in-progress' ? 'text-yellow-400' :
-                          'text-blue-400'
-                        }`}>
-                          {getStatusText(project.status)}
-                        </span>
-                      </div>
-                    </div>
+              {/* Project Details */}
+              <div className="mb-6 bg-gray-700/30 rounded-lg p-4">
+                <h4 className="text-md font-semibold text-white mb-3">Project Details</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Started:</span>
+                    <span className="text-white">{formatDate(project.startDate)}</span>
                   </div>
-
-                  {/* Action Buttons */}
-                  <div className="space-y-3">
-                    {project.githubUrl && (
-                      <motion.a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <span>📚</span>
-                        <span>View Source Code</span>
-                      </motion.a>
-                    )}
-                    {project.liveUrl && (
-                      <motion.a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-2 px-4 rounded-lg transition-all flex items-center justify-center space-x-2"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <span>🚀</span>
-                        <span>View Live Demo</span>
-                      </motion.a>
-                    )}
+                  {project.endDate && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Completed:</span>
+                      <span className="text-white">{formatDate(project.endDate)}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Status:</span>
+                    <span className={`font-medium ${
+                      project.status === 'completed' ? 'text-green-400' :
+                      project.status === 'in-progress' ? 'text-yellow-400' :
+                      'text-blue-400'
+                    }`}>
+                      {getStatusText(project.status)}
+                    </span>
                   </div>
                 </div>
               </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                {project.githubUrl && (
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                  >
+                    <span>📚</span>
+                    <span>View Source Code</span>
+                  </a>
+                )}
+                {project.liveUrl && (
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-3 px-4 rounded-lg transition-all flex items-center justify-center space-x-2"
+                  >
+                    <span>🚀</span>
+                    <span>View Live Demo</span>
+                  </a>
+                )}
+              </div>
             </div>
           </motion.div>
-        </motion.div>
+
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 -z-10" 
+            onClick={onClose}
+          />
+        </div>
       )}
     </AnimatePresence>
   );
