@@ -38,8 +38,6 @@ export default defineConfig({
         entryFileNames: 'assets/js/[name]-[hash].js'
       }
     },
-    // Optimize chunk size
-    chunkSizeWarningLimit: 1000,
     // Enable minification with terser options
     minify: 'terser',
     terserOptions: {
@@ -86,9 +84,7 @@ export default defineConfig({
   assetsInclude: ['**/*.woff2', '**/*.woff', '**/*.ttf'],
   // Define environment variables
   define: {
-    __APP_VERSION__: JSON.stringify('1.0.0'),
-    // Optimize for production
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+    __APP_VERSION__: JSON.stringify('1.0.0')
   },
   // CSS optimization
   css: {
