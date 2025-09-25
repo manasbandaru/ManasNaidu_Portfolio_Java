@@ -9,16 +9,20 @@ export const isProduction = (): boolean => {
 
 // Optimize animations for production
 export const getOptimizedAnimationProps = (baseProps: any) => {
-  if (isProduction()) {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const isLowEnd = typeof navigator !== 'undefined' && navigator.hardwareConcurrency < 4;
+  
+  if (isProduction() || isMobile || isLowEnd) {
     return {
       ...baseProps,
       transition: {
         ...baseProps.transition,
-        duration: Math.min(baseProps.transition?.duration || 0.3, 0.2),
+        duration: Math.min(baseProps.transition?.duration || 0.3, 0.15),
+        ease: 'easeOut', // Simpler easing
       },
-      // Reduce complex animations in production
-      whileHover: baseProps.whileHover ? { scale: 1.01 } : undefined,
-      whileTap: baseProps.whileTap ? { scale: 0.99 } : undefined,
+      // Minimal animations for performance
+      whileHover: baseProps.whileHover ? { scale: 1.005 } : undefined,
+      whileTap: baseProps.whileTap ? { scale: 0.995 } : undefined,
     };
   }
   return baseProps;
@@ -69,12 +73,15 @@ export const getOptimizedImageProps = (src: string, alt: string) => {
   };
 };
 
-// Reduce motion for users who prefer it or in production
+// Reduce motion for users who prefer it, in production, or on mobile
 export const shouldReduceMotion = (): boolean => {
   if (typeof window === 'undefined') return true;
   
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  return prefersReducedMotion || isProduction();
+  const isMobile = window.innerWidth < 768;
+  const isLowEnd = navigator.hardwareConcurrency < 4;
+  
+  return prefersReducedMotion || isProduction() || isMobile || isLowEnd;
 };
 
 // Get optimized framer motion variants

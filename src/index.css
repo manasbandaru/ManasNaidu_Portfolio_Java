@@ -306,4 +306,111 @@
       will-change: auto;
     }
   }
+  
+  /* Ultra-optimized animations for static background */
+  @keyframes float-1 {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(10px, -15px, 0) scale(1.1); }
+  }
+  
+  @keyframes float-2 {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(-8px, 12px, 0) scale(0.9); }
+  }
+  
+  @keyframes float-3 {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(15px, -8px, 0) scale(1.2); }
+  }
+  
+  @keyframes float-4 {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(-12px, -10px, 0) scale(0.8); }
+  }
+  
+  @keyframes float-5 {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(8px, 18px, 0) scale(1.1); }
+  }
+  
+  @keyframes float-6 {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(-15px, -5px, 0) scale(0.9); }
+  }
+  
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.8; }
+  }
+  
+  .animate-float-1 { animation: float-1 8s ease-in-out infinite; }
+  .animate-float-2 { animation: float-2 10s ease-in-out infinite 1s; }
+  .animate-float-3 { animation: float-3 12s ease-in-out infinite 2s; }
+  .animate-float-4 { animation: float-4 9s ease-in-out infinite 0.5s; }
+  .animate-float-5 { animation: float-5 11s ease-in-out infinite 1.5s; }
+  .animate-float-6 { animation: float-6 7s ease-in-out infinite 2.5s; }
+  .animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+  
+  /* Disable all animations on low-end devices */
+  @media (max-width: 768px) and (max-height: 1024px) {
+    .animate-float-1,
+    .animate-float-2,
+    .animate-float-3,
+    .animate-float-4,
+    .animate-float-5,
+    .animate-float-6,
+    .animate-pulse-slow {
+      animation: none;
+    }
+  }
+  
+  /* Performance mode optimizations */
+  .performance-mode * {
+    animation-duration: 0.01s !important;
+    transition-duration: 0.01s !important;
+  }
+  
+  .performance-mode .animate-pulse,
+  .performance-mode .animate-gradient,
+  .performance-mode [class*="animate-float"] {
+    animation: none !important;
+  }
+  
+  /* Mobile-specific optimizations */
+  @media (max-width: 768px) {
+    * {
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    
+    .smooth-animation {
+      transition-duration: 0.1s !important;
+    }
+    
+    /* Reduce motion blur on mobile */
+    .experience-card,
+    .skill-card,
+    .project-card {
+      will-change: auto;
+    }
+  }
+  
+  /* Low-end device optimizations */
+  .low-end-device * {
+    animation: none !important;
+    transition-duration: 0.05s !important;
+  }
+  
+  .low-end-device .gradient-text {
+    background: none !important;
+    color: #8b5cf6 !important;
+  }
+  
+  /* Slow connection optimizations */
+  .slow-connection .animate-pulse,
+  .slow-connection [class*="animate-"] {
+    animation: none !important;
+  }
 }

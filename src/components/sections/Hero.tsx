@@ -101,16 +101,16 @@ export const Hero: React.FC = () => {
 
       <div className="container mx-auto px-4 text-center relative z-10">
         <motion.div
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
+          initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
           animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-          transition={prefersReducedMotion ? {} : { duration: 0.8 }}
+          transition={prefersReducedMotion ? {} : { duration: 0.4, ease: 'easeOut' }}
           className="max-w-4xl mx-auto"
         >
           {/* Greeting */}
           <motion.p
             initial={prefersReducedMotion ? {} : { opacity: 0 }}
             animate={prefersReducedMotion ? {} : { opacity: 1 }}
-            transition={prefersReducedMotion ? {} : { delay: 0.2, duration: 0.6 }}
+            transition={prefersReducedMotion ? {} : { delay: 0.1, duration: 0.3 }}
             className="text-lg md:text-xl text-gray-400 mb-4 font-mono"
           >
             Hello, I'm
@@ -140,9 +140,9 @@ export const Hero: React.FC = () => {
 
           {/* Experience Badge */}
           <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.8 }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.9 }}
             animate={prefersReducedMotion ? {} : { opacity: 1, scale: 1 }}
-            transition={prefersReducedMotion ? {} : { delay: 1.5, duration: 0.5 }}
+            transition={prefersReducedMotion ? {} : { delay: 0.3, duration: 0.3, ease: 'easeOut' }}
             className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-500/30 rounded-full mb-8"
             role="status"
             aria-label={`${heroContent.yearsExperience} plus years of experience`}
@@ -160,7 +160,7 @@ export const Hero: React.FC = () => {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2, duration: 0.8 }}
+            transition={{ delay: prefersReducedMotion ? 0 : 0.4, duration: 0.4 }}
             className="text-xl md:text-2xl text-gray-300 mb-4 max-w-3xl mx-auto leading-relaxed"
           >
             {heroContent.tagline}
@@ -170,7 +170,7 @@ export const Hero: React.FC = () => {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2.3, duration: 0.8 }}
+            transition={{ delay: prefersReducedMotion ? 0 : 0.5, duration: 0.4 }}
             className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed"
           >
             {heroContent.description}
@@ -178,9 +178,9 @@ export const Hero: React.FC = () => {
 
           {/* CTA Buttons */}
           <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: 10 }}
             animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-            transition={prefersReducedMotion ? {} : { delay: 2.6, duration: 0.6 }}
+            transition={prefersReducedMotion ? {} : { delay: 0.6, duration: 0.3, ease: 'easeOut' }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             {heroContent.ctaButtons.map((button) => (
@@ -188,12 +188,12 @@ export const Hero: React.FC = () => {
                 key={button.text}
                 onClick={() => scrollToSection(button.href)}
                 whileHover={prefersReducedMotion ? {} : { 
-                  scale: 1.05,
+                  scale: 1.02,
                   boxShadow: button.primary 
-                    ? "0 20px 40px rgba(139, 92, 246, 0.3)"
-                    : "0 10px 20px rgba(255, 255, 255, 0.1)"
+                    ? "0 10px 20px rgba(139, 92, 246, 0.2)"
+                    : "0 5px 10px rgba(255, 255, 255, 0.05)"
                 }}
-                whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+                whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
                 className={`
                   px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 w-full sm:w-auto sm:min-w-[220px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 text-center
                   ${button.primary 

@@ -56,13 +56,14 @@ export const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ experien
         {experiences.map((exp, index) => (
           <motion.div
             key={exp.id}
-            initial={{ opacity: 0, x: shouldReduceMotion() ? 0 : -30 }}
+            initial={{ opacity: 0, x: shouldReduceMotion() ? 0 : -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ 
-              duration: shouldReduceMotion() ? 0.2 : 0.5, 
-              delay: shouldReduceMotion() ? 0 : index * 0.05 
+              duration: shouldReduceMotion() ? 0.1 : 0.3, 
+              delay: shouldReduceMotion() ? 0 : index * 0.02,
+              ease: 'easeOut'
             }}
-            viewport={{ once: true, margin: '50px' }}
+            viewport={{ once: true, margin: '100px' }}
             className="relative"
           >
             {/* Timeline dot */}
@@ -151,7 +152,7 @@ export const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ experien
                   </span>
                   <motion.div
                     animate={{ rotate: expandedId === exp.id ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: shouldReduceMotion() ? 0.1 : 0.2, ease: 'easeOut' }}
                     className="text-purple-400"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -168,7 +169,7 @@ export const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ experien
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: shouldReduceMotion() ? 0.1 : 0.2, ease: 'easeOut' }}
                     className="overflow-hidden"
                   >
                     <div className="bg-gray-800 rounded-xl p-6 mt-4 border border-gray-600">
@@ -181,9 +182,13 @@ export const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ experien
                         {exp.achievements.map((achievement, idx) => (
                           <motion.div
                             key={idx}
-                            initial={{ opacity: 0, x: -20 }}
+                            initial={{ opacity: 0, x: shouldReduceMotion() ? 0 : -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.3, delay: idx * 0.1 }}
+                            transition={{ 
+                              duration: shouldReduceMotion() ? 0.1 : 0.2, 
+                              delay: shouldReduceMotion() ? 0 : idx * 0.03,
+                              ease: 'easeOut'
+                            }}
                             className="flex items-start space-x-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
                           >
                             <div className="w-6 h-6 bg-gradient-to-r from-green-400 to-blue-400 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">

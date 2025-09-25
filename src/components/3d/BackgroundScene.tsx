@@ -520,8 +520,13 @@ export const BackgroundScene: React.FC<BackgroundSceneProps> = ({ className = ''
     return <WebGLFallback />;
   }
 
-  // Use static background in production for better performance
-  if (import.meta.env.PROD && (window.innerWidth < 768 || navigator.hardwareConcurrency < 4)) {
+  // Always use static background in production for maximum performance
+  if (import.meta.env.PROD) {
+    return <StaticBackground className={className} />;
+  }
+
+  // Use static background for mobile devices even in development
+  if (window.innerWidth < 768) {
     return <StaticBackground className={className} />;
   }
 

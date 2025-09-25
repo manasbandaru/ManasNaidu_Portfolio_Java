@@ -44,10 +44,21 @@ export default defineConfig({
       compress: {
         drop_console: true, // Remove console.log in production
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug']
+        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn'],
+        passes: 2, // Multiple passes for better compression
+        unsafe: true, // Enable unsafe optimizations
+        unsafe_comps: true,
+        unsafe_math: true,
+        unsafe_methods: true
       },
       mangle: {
-        safari10: true
+        safari10: true,
+        properties: {
+          regex: /^_/
+        }
+      },
+      format: {
+        comments: false
       }
     },
     // Disable source maps in production for smaller bundle
@@ -67,8 +78,8 @@ export default defineConfig({
   },
   // Optimize dependencies
   optimizeDeps: {
-    include: ['react', 'react-dom', 'framer-motion'],
-    exclude: ['three'] // Three.js will be loaded lazily
+    include: ['react', 'react-dom'],
+    exclude: ['three', 'framer-motion'] // Load heavy libraries lazily
   },
   // Server configuration
   server: {

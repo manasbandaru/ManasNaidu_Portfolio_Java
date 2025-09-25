@@ -57,9 +57,10 @@ export const Header: React.FC<HeaderProps> = ({ navigationItems }) => {
 
   return (
     <motion.header
-      initial={prefersReducedMotion ? {} : { y: -100 }}
+      initial={prefersReducedMotion ? {} : { y: -50 }}
       animate={prefersReducedMotion ? {} : { y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      transition={prefersReducedMotion ? {} : { duration: 0.3, ease: 'easeOut' }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
         isScrolled 
           ? 'bg-gray-900/95 backdrop-blur-md border-b border-gray-800' 
           : 'bg-transparent'
@@ -86,8 +87,9 @@ export const Header: React.FC<HeaderProps> = ({ navigationItems }) => {
               <motion.button
                 key={item.id}
                 onClick={() => scrollToSection(item.href)}
-                whileHover={prefersReducedMotion ? {} : { y: -2 }}
-                className={`relative px-3 py-2 text-sm font-medium transition-colors rounded-md focus:outline-none ${
+                whileHover={prefersReducedMotion ? {} : { y: -1 }}
+                transition={prefersReducedMotion ? {} : { duration: 0.15, ease: 'easeOut' }}
+                className={`relative px-3 py-2 text-sm font-medium transition-colors duration-150 rounded-md focus:outline-none ${
                   activeSection === item.href.substring(1)
                     ? 'text-blue-400'
                     : 'text-gray-300 hover:text-white'
@@ -110,9 +112,10 @@ export const Header: React.FC<HeaderProps> = ({ navigationItems }) => {
           {/* Mobile menu button */}
           <div className="md:hidden">
             <motion.button
-              whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+              whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+              transition={prefersReducedMotion ? {} : { duration: 0.1 }}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-800 transition-colors focus:outline-none"
+              className="p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-800 transition-colors duration-150 focus:outline-none"
               aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"

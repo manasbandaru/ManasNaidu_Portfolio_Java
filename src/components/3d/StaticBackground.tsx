@@ -7,31 +7,31 @@ interface StaticBackgroundProps {
 export const StaticBackground: React.FC<StaticBackgroundProps> = ({ className = '' }) => {
   return (
     <div className={`fixed inset-0 -z-10 ${className}`}>
-      {/* Static gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-purple-900/20 to-blue-900/20"></div>
+      {/* High-performance gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-purple-900/15 to-blue-900/15"></div>
       
-      {/* Animated gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-blue-500/10 animate-pulse"></div>
+      {/* Subtle animated gradient overlay - optimized */}
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-transparent to-blue-500/5 animate-pulse-slow"></div>
       
-      {/* Static particles effect using CSS */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-        <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 right-1/3 w-1 h-1 bg-purple-300 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-        <div className="absolute bottom-1/3 right-1/2 w-2 h-2 bg-blue-300 rounded-full animate-pulse" style={{ animationDelay: '1.5s' }}></div>
-        <div className="absolute top-3/4 left-1/2 w-1 h-1 bg-cyan-300 rounded-full animate-pulse" style={{ animationDelay: '2.5s' }}></div>
+      {/* Minimal particle effect using CSS transforms for GPU acceleration */}
+      <div className="absolute inset-0 opacity-20 will-change-transform">
+        <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-purple-400 rounded-full animate-float-1"></div>
+        <div className="absolute top-1/3 right-1/4 w-0.5 h-0.5 bg-blue-400 rounded-full animate-float-2"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-1 h-1 bg-cyan-400 rounded-full animate-float-3"></div>
+        <div className="absolute top-1/2 right-1/3 w-0.5 h-0.5 bg-purple-300 rounded-full animate-float-4"></div>
+        <div className="absolute bottom-1/3 right-1/2 w-1 h-1 bg-blue-300 rounded-full animate-float-5"></div>
+        <div className="absolute top-3/4 left-1/2 w-0.5 h-0.5 bg-cyan-300 rounded-full animate-float-6"></div>
       </div>
       
-      {/* Subtle mesh pattern */}
+      {/* Ultra-subtle mesh pattern - reduced opacity */}
       <div 
-        className="absolute inset-0 opacity-5"
+        className="absolute inset-0 opacity-2"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px)
+            linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px)
           `,
-          backgroundSize: '50px 50px'
+          backgroundSize: '60px 60px'
         }}
       ></div>
     </div>
